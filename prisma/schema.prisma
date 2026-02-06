@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile    Profile?
+  subjects   UserSubject[]
+  issues     Issue[]         @relation("IssueAuthor")
+  matchesAsLearner Match[]    @relation("Learner")
+  matchesAsExpert  Match[]   @relation("Expert")
+  messagesSent     Message[] @relation("Sender")
+  meetingsAsLearner Meeting[] @relation("MeetingLearner")
+  meetingsAsExpert  Meeting[] @relation("MeetingExpert")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bio       String?
+  expertise String?  // comma-separated or JSON: e.g. "Math,Physics,Programming"
+  interests String?  // subjects they want to learn
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subject {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  userSubjects UserSubject[]
+  issues       Issue[]
+}
+
+model UserSubject {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  role      String   // "learner" | "expert"
+  createdAt DateTime @default(now())
+
+  @@unique([userId, subjectId])
+}
+
+model Issue {
+  id          String   @id @default(cuid())
+  authorId    String
+  author      User     @relation("IssueAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  subjectId   String
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  triedSoFar  String?  // what the user has already tried
+  status      String   @default("open") // open | matched | resolved
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  matches Match[]
+}
+
+model Match {
+  id        String   @id @default(cuid())
+  issueId   String
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  learnerId String
+  learner   User     @relation("Learner", fields: [learnerId], references: [id], onDelete: Cascade)
+  expertId  String
+  expert    User     @relation("Expert", fields: [expertId], references: [id], onDelete: Cascade)
+  status    String   @default("pending") // pending | accepted | declined
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages Message[]
+  meetings  Meeting[]
+
+  @@unique([issueId, expertId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  matchId   String
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Meeting {
+  id         String   @id @default(cuid())
+  matchId    String
+  match      Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  learnerId  String
+  learner    User     @relation("MeetingLearner", fields: [learnerId], references: [id], onDelete: Cascade)
+  expertId   String
+  expert     User     @relation("MeetingExpert", fields: [expertId], references: [id], onDelete: Cascade)
+  scheduledAt DateTime
+  type       String   @default("online") // online | physical
+  location   String?  // link or address
+  status     String   @default("scheduled") // scheduled | completed | cancelled
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

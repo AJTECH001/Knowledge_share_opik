@@ -1,0 +1,48 @@
+{
+  "name": "knowledgeshare",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Share knowledge and get matched with experts — Encode Comet Resolution V2 Hackathon (Personal Growth & Learning)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:seed": "npx tsx prisma/seed.ts",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "next": "14.2.18",
+    "next-auth": "^4.24.10",
+    "opik": "^1.10.0",
+    "opik-openai": "^1.10.0",
+    "openai": "^6.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.460.0",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.18",
+    "postcss": "^8.4.49",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2"
+  },
+  "prisma": {
+    "seed": "npx tsx prisma/seed.ts"
+  }
+}
