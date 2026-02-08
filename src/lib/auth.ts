@@ -3,7 +3,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "./db";
 
 const secret = process.env.NEXTAUTH_SECRET;
-if (!secret && process.env.NODE_ENV === "production") {
+// Only enforce at runtime so `next build` succeeds on Vercel (env vars are set in dashboard, not at build time)
+const isBuild = process.env.NEXT_PHASE === "phase-production-build";
+if (!secret && process.env.NODE_ENV === "production" && !isBuild) {
   throw new Error("NEXTAUTH_SECRET must be set in production (e.g. openssl rand -base64 32)");
 }
 
