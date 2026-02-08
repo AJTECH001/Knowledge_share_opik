@@ -10,7 +10,7 @@ type Match = {
   expertId: string;
   meetings: {
     id: string;
-    scheduledAt: string;
+    scheduledAt: string | Date;
     type: string;
     location: string | null;
     status: string;
