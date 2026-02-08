@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 type Message = {
   id: string;
   content: string;
-  createdAt: string;
+  createdAt: string | Date;
   senderId: string;
   sender: { name: string | null; email: string | null };
 };

@@ -3,7 +3,7 @@ import { Opik } from "opik";
 import { trackOpenAI } from "opik-openai";
 
 /**
- * Opik TypeScript SDK configuration per official docs.
+ * Opik TypeScript SDK client (env-based config).
  * @see https://www.comet.com/docs/opik/reference/typescript-sdk/overview
  */
 function createOpikClient(): Opik | null {
@@ -13,14 +13,14 @@ function createOpikClient(): Opik | null {
   return new Opik({
     apiKey,
     apiUrl: process.env.OPIK_URL_OVERRIDE ?? "https://www.comet.com/opik/api",
-    projectName: process.env.OPIK_PROJECT_NAME ?? "Default Project",
+    projectName: process.env.OPIK_PROJECT_NAME ?? "knowledgeshare",
     workspaceName: process.env.OPIK_WORKSPACE_NAME ?? undefined,
   });
 }
 
 /**
- * OpenAI client for expert matching. When OPIK_API_KEY is set,
- * uses Opik TypeScript SDK + opik-openai so all LLM calls are traced.
+ * OpenAI client; when OPIK_API_KEY is set, wrapped with Opik tracing.
+ * Business logic unchanged; only Opik wrapper added when configured.
  */
 function createClient(): OpenAI | ReturnType<typeof trackOpenAI> {
   const apiKey = process.env.OPENAI_API_KEY;
@@ -30,7 +30,14 @@ function createClient(): OpenAI | ReturnType<typeof trackOpenAI> {
   const opikClient = createOpikClient();
 
   if (opikClient) {
-    return trackOpenAI(openai, { client: opikClient });
+    return trackOpenAI(openai, {
+      client: opikClient,
+      generationName: "KnowledgeShare-ExpertMatching",
+      traceMetadata: {
+        tags: ["knowledgeshare", "expert-matching"],
+        component: "match-api",
+      },
+    }) as OpenAI & { chat: { completions: { create: any } } };
   }
 
   return openai;
@@ -43,9 +50,9 @@ export function getTrackedOpenAIClient(): OpenAI | ReturnType<typeof trackOpenAI
   return _client;
 }
 
+/** Call after LLM usage so traces are sent to Opik. */
 export async function flushOpik(): Promise<void> {
-  const client = _client;
-  if (client && typeof (client as { flush?: () => Promise<void> }).flush === "function") {
-    await (client as { flush: () => Promise<void> }).flush();
+  if (_client && typeof (_client as { flush?: () => Promise<void> }).flush === "function") {
+    await (_client as { flush: () => Promise<void> }).flush();
   }
 }

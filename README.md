@@ -1,69 +1,79 @@
 # KnowledgeShare
 
-A platform where users share knowledge and get matched with experts who can help. Built for the **Personal Growth & Learning** track of the [Encode Club Comet Resolution V2 Hackathon](https://www.encodeclub.com/programmes/comet-resolution-v2-hackathon).
+> **Connect, Learn, and Grow.**
+> A platform bridging the gap between learners and experts for real-time knowledge sharing.
+
+![KnowledgeShare Banner](https://via.placeholder.com/1200x400?text=KnowledgeShare+Platform)
+
+## 🚀 Overview
+
+**KnowledgeShare** is a full-stack web application built to foster personal growth by connecting individuals stuck on specific topics with experts who can guide them. Whether you're mastering a new coding language, navigating career changes, or exploring a hobby, KnowledgeShare facilitates meaningful mentorship through AI-powered matching.
+
+Built for the **Comet Resolution V2 Hackathon** (Personal Growth & Learning Track), this project leverages **OpenAI** for intelligent expert ranking and **Opik** for deep observability into AI interactions.
 
 ---
 
-## Overview
+## ✨ Key Features
 
-KnowledgeShare connects learners who are stuck on a topic with experts who can guide them. Users create profiles, register for subjects (as learner or expert), report issues with context, and get matched via an LLM. Matched pairs can schedule meetings and chat in real time.
+- **👥 Dual Roles:** Seamlessly switch between being a **Learner** (seeking help) and an **Expert** (offering mentorship) on a per-subject basis.
+- **🤖 AI-Powered Matching:** Intelligent ranking system powered by **GPT-4o-mini** that analyzes issue descriptions to find the most relevant experts.
+- **📊 Observability with Opik:** Full transparency into the matching logic with **Opik** traces, ensuring high-quality AI performance.
+- **💬 Real-Time Chat:** integrated messaging system for instant communication between matched pairs.
+- **📅 Scheduling:** Easy booking system for online or in-person mentorship sessions.
+- **🔒 Secure Authentication:** Robust user management via **NextAuth.js**.
 
-## Features
+---
 
-| Feature | Description |
-|--------|-------------|
-| **Profiles** | Bio, expertise, and interests |
-| **Subjects** | Register as learner or expert per subject |
-| **Issue reporting** | Describe your problem and what you’ve tried |
-| **Expert matching** | AI ranks and matches experts (traced with [Opik](https://www.comet.com/docs/opik/)) |
-| **Scheduling** | Book online or in-person meetings |
-| **Chat** | Real-time messaging between learner and expert |
+## 🛠️ Technology Stack
 
-## Tech stack
+- **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Database:** [SQLite](https://www.sqlite.org/) with [Prisma ORM](https://www.prisma.io/)
+- **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+- **AI & LLMs:** [OpenAI API](https://openai.com/) (GPT-4o-mini)
+- **Observability:** [Opik](https://www.comet.com/opik) (Tracing & Evaluation)
 
-- **Next.js 14** (App Router), **TypeScript**, **Tailwind CSS**
-- **Prisma** + **SQLite**
-- **NextAuth** (credentials, JWT)
-- **OpenAI** (gpt-4o-mini) for expert matching
-- **Opik** (TypeScript SDK + opik-openai) for LLM observability
+---
 
-## Getting started
+## 🏁 Getting Started
+
+Follow these steps to set up the project locally.
 
 ### Prerequisites
 
-- Node.js 18+
-- npm (or yarn/pnpm)
+- **Node.js** 18+
+- **npm** (or yarn/pnpm)
 
-### 1. Clone and install
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/knowledgeshare.git
+git clone https://github.com/AJTECH001/knowledgeshare.git
 cd knowledgeshare
 npm install
 ```
 
-### 2. Environment variables
+### 2. Configure Environment
 
-Copy the example env file and set required values:
+Create a `.env` file in the root directory and add the following variables:
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` and set at least:
+**Required Variables:**
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `NEXTAUTH_SECRET` | Yes | Session signing key. Generate with: `openssl rand -base64 32` |
-| `NEXTAUTH_URL` | Yes | App URL, e.g. `http://localhost:3000` |
-| `DATABASE_URL` | Yes | SQLite default: `file:./dev.db` |
-| `OPENAI_API_KEY` | Yes | [OpenAI API key](https://platform.openai.com/api-keys) for expert matching |
-| `OPIK_API_KEY` | For tracing | [Opik Cloud](https://www.comet.com/api/my/settings/) — optional for local run |
-| `OPIK_URL_OVERRIDE` | Optional | `https://www.comet.com/opik/api` for Opik Cloud |
-| `OPIK_PROJECT_NAME` | Optional | Project name in Opik UI |
-| `OPIK_WORKSPACE_NAME` | Optional | Opik workspace name |
+| Variable | Description |
+| :--- | :--- |
+| `NEXTAUTH_SECRET` | Generate with `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | `http://localhost:3000` for local development |
+| `DATABASE_URL` | Connection string (default: `file:./dev.db`) |
+| `OPENAI_API_KEY` | Your OpenAI API Key for matching logic |
+| `OPIK_API_KEY` | Your Opik API Key for observability |
 
-### 3. Database setup
+### 3. Setup Database
+
+Initialize the database and seed it with default subjects:
 
 ```bash
 npm run db:generate
@@ -71,68 +81,43 @@ npm run db:push
 npm run db:seed
 ```
 
-### 4. Run the app
+### 4. Run the Application
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Sign in with any email (no password; an account is created if needed).
+Visit [http://localhost:3000](http://localhost:3000) to see the app in action!
 
-## Scripts
+---
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run db:generate` | Generate Prisma client |
-| `npm run db:push` | Push schema to database |
-| `npm run db:seed` | Seed default subjects |
-| `npm run db:studio` | Open Prisma Studio |
+## 🧪 Testing & Observability
 
-## Project structure
+To see **Opik** in action:
+1. Ensure `OPIK_API_KEY` is set in your `.env`.
+2. Post an issue and trigger the "Find Experts" action.
+3. Check your [Opik Project Dashboard](https://www.comet.com/opik) to view traces of the matching process.
 
-```
-knowledgeshare/
-├── prisma/
-│   ├── schema.prisma    # Data model
-│   └── seed.ts          # Default subjects
-├── src/
-│   ├── app/             # Next.js App Router (pages, API routes)
-│   ├── components/      # React components
-│   ├── lib/             # DB, auth, OpenAI/Opik client
-│   └── types/           # TypeScript declarations
-├── .env.example
-├── LICENSE
-└── README.md
-```
+---
 
-## Hackathon alignment (Personal Growth & Learning)
+## 🤝 Contributing
 
-- **Functionality** — Profile, subjects, issues, AI matching, chat, and scheduling are implemented end-to-end.
-- **Real-world relevance** — Supports learners and experts in a structured, practical way.
-- **Use of LLMs/Agents** — Expert matching uses an LLM to rank experts by fit; all calls are wrapped with Opik.
-- **Evaluation & observability** — Opik integration: set `OPIK_API_KEY` to log traces to [Opik](https://www.comet.com/opik); see [Opik Encode Quickstart](https://colab.research.google.com/drive/14NRe_5sLXrXoqrOWXxrEz1qnY7mG_ul6).
-- **Goal alignment** — Focuses on learning and growth through help and real-time interaction.
+Contributions are welcome!
 
-## Contributing
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-1. Fork the repository.
-2. Create a branch: `git checkout -b feature/your-feature`.
-3. Commit changes: `git commit -m 'Add some feature'`.
-4. Push: `git push origin feature/your-feature`.
-5. Open a Pull Request.
+---
 
-## Pre-push checklist
+## 📜 License
 
-- Run `npm install` (required for `opik` and `opik-openai`).
-- Run `npm run build` and `npm run lint` — both must pass.
-- Do not commit `.env` or `prisma/*.db` (they are in `.gitignore`).
-- Set a strong `NEXTAUTH_SECRET` in production.
+Distributed under the MIT License. See `LICENSE` for more information.
 
-## License
+---
 
-[MIT](LICENSE)
-# Knowledge_share_opik
+<p align="center">
+  Built with ❤️ by Jamiu Damilola Alade for Encode Club Hackathon
+</p>
