@@ -37,6 +37,7 @@ function createClient(): OpenAI | ReturnType<typeof trackOpenAI> {
         tags: ["knowledgeshare", "expert-matching"],
         component: "match-api",
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }) as OpenAI & { chat: { completions: { create: any } } };
   }
 

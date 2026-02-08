@@ -51,6 +51,7 @@ Reply only with JSON, e.g. {"expert_ids": ["id1","id2"]}`;
 
   let orderedIds: string[] = [];
   try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const completion = await (trackedOpenAI as any).chat.completions.create({
       model: "gpt-4o-mini",
       messages: [{ role: "user", content: prompt }],
